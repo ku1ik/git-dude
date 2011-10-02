@@ -15,15 +15,13 @@ function notify() {
   if [ $(which notify-send 2>/dev/null) ]; then
     notify-send -i "$1" "$2" "$3"
   elif [ $(which growlnotify 2>/dev/null) ]; then
-    growlnotify -l "$1" -m "$3" "$2"
+    growlnotify --image "$1" -m "$3" "$2"
   else
     echo $2; echo $3
   fi
 }
 
 while true; do
-  echo -n .
-
   for dir_name in *; do
     if [[ -d $dir_name ]]; then
       repo_name=$(basename $dir_name .git)
