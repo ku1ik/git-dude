@@ -11,7 +11,7 @@ anything new arrived.
 
 ## Usage
 
-    git-dude expects you have a directory that contains git repositories (as
+git-dude expects you have a directory that contains git repositories (as
 direct children).
 
     $ mkdir ~/.git-dude
