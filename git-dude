@@ -9,7 +9,7 @@ eval ICON_PATH=$ICON_PATH # to expand ~
 
 export LC_ALL=C # make sure git talks english
 
-if [[ -n $1 ]]; then
+if [[ -d $1 ]]; then
   cd $1
 fi
 
