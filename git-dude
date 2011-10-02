@@ -1,10 +1,17 @@
 #!/bin/bash
 
-INTERVAL=30
-ICON_PATH=`pwd`/icon.png
+INTERVAL=$(git config dude.interval)
+INTERVAL=${INTERVAL:-60}
+
+ICON_PATH=$(git config dude.icon)
+ICON_PATH=${ICON_PATH:-`pwd`/icon.png}
+eval ICON_PATH=$ICON_PATH # to expand ~
+
 export LC_ALL=C # make sure git talks english
 
 while [ 1 ]; do
+  echo -n .
+
   for dir_name in *; do
     if [[ -d $dir_name ]]; then
       repo_name=$(basename $dir_name .git)
