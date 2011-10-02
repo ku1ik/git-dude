@@ -11,6 +11,16 @@ export LC_ALL=C # make sure git talks english
 
 [[ -d $1 ]] && cd $1
 
+function notify() {
+  if [ $(which notify-send 2>/dev/null) ]; then
+    notify-send -i "$1" "$2" "$3"
+  elif [ $(which growlnotify 2>/dev/null) ]; then
+    growlnotify -l "$1" -m "$3" "$2"
+  else
+    echo $2; echo $3
+  fi
+}
+
 while true; do
   echo -n .
 
@@ -27,11 +37,11 @@ while true; do
             commit_range=$(echo "$line" | awk '{ print $1 }')
             branch_name=$(echo "$line" | awk '{ print $2 }')
             commit_messages=$(git log $commit_range --pretty=format:'%s (%an)')
-            notify-send -i $ICON_PATH "New commits in $repo_name/$branch_name" "$commit_messages"
+            notify $ICON_PATH "New commits in $repo_name/$branch_name" "$commit_messages"
             ;;
           *new*)
             branch_name=$(echo "$line" | awk '{ print $4 }')
-            notify-send -i $ICON_PATH "New branch $repo_name/$branch_name"
+            notify $ICON_PATH "New branch $repo_name/$branch_name"
             ;;
         esac
       done <<< "$CHANGES"
