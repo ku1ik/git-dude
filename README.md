@@ -10,6 +10,16 @@ It simply uses `git fetch` and parses its output to see what changed. Then it
 formats new commit messages with `git log` and shows desktop notification with
 `notify-send` (Linux) or `growlnotify` (OSX). All of this in infinite loop.
 
+## Requirements
+
+On Linux:
+
+* `notify-send` (Fedora: _libnotify_ package, Ubuntu: _libnotify-bin_ package)
+
+On OSX:
+
+* `growlnotify`, from [Growl Extras](http://growl.info/extras.php#growlnotify)
+
 ## Installation
 
     $ curl -skL https://github.com/sickill/git-dude/raw/master/git-dude >~/bin/git-dude
