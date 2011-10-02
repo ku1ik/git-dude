@@ -8,7 +8,7 @@ anything new arrived.
 
 It simply uses `git fetch` and parses its output to see what changed. Then it
 formats new commit messages with `git log` and shows desktop notification with
-`notify-send` (Linux) or `growl` (OSX - TODO). All of this in infinite loop.
+`notify-send` (Linux) or `growl` (OSX). All of this in infinite loop.
 
 ## Installation
 
