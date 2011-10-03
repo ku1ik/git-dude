@@ -58,13 +58,13 @@ projects:
 Now, from _dude_ directory run:
 
     $ cd ~/.git-dude
-    $ git dude
+    $ git-dude
 
 You can also pass directory name as first argument to specify which directory
 to monitor instead of _pwd_.
 
     $ cd ~
-    $ git dude ~/.git-dude
+    $ git-dude ~/.git-dude
 
 This way you can have multiple _dude_ directories each being monitored by
 separate git-dude process.
