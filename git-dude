@@ -41,8 +41,20 @@ function notify() {
   fi
 }
 
+function find_repos() {
+  repos=$(git config dude.repos)
+
+  if [ x"$repos" = "x" ]; then
+    echo *
+  else
+    echo "$repos"
+  fi
+}
+
 while true; do
-  for dir_name in *; do
+  repos=$(find_repos)
+  for dir_name in $repos; do
+    eval dir_name=$dir_name
     if [[ -d $dir_name ]]; then
       repo_name=$(basename $dir_name .git)
       cd "$dir_name"
