@@ -1,7 +1,7 @@
 # git-dude
 
 git-dude is a simple git desktop notifier. It monitors git repositories in
-given directory for new commits and branches and shows desktop notification if
+current directory for new commits/branches/tags and shows desktop notification if
 anything new arrived.
 
 ## How it works
@@ -42,32 +42,37 @@ On OSX:
 
 ## Usage
 
-git-dude expects you have a dedicated directory that contains git repositories
-(as direct children).
+git-dude iterates over repositories that live inside _the dude directory_. This
+directory is nothing more than container for cloned repositories of projects
+you want to watch.  Name it like you want, here for example we use
+_~/.git-dude_:
 
     $ mkdir ~/.git-dude
     $ cd ~/.git-dude
+
+Clone some repositories:
+
     $ git clone --mirror some-repo-url
     $ git clone --mirror other-repo-url
+
+I recommend `git clone --mirror` - it doesn't checkout working directory so it
+saves some disk space for bigger projects.
 
 Symlinked repositories work too. This way you can monitor already cloned
 projects:
 
-    $ cd ~/.git-dude
-    $ ln -s ~/code/existing-repo
+    $ ln -s ~/code/existing-repo .
 
-Now, from _dude_ directory run:
+Now run this to monitor _pwd_:
 
-    $ cd ~/.git-dude
     $ git dude
 
 You can also pass directory name as first argument to specify which directory
 to monitor instead of _pwd_.
 
-    $ cd ~
-    $ git dude ~/.git-dude
+    $ git dude ~/watched-repos
 
-This way you can have multiple _dude_ directories each being monitored by
+This way you can have multiple _dude directories_ each being monitored by
 separate git-dude process.
 
 ## Configuration
