@@ -45,7 +45,7 @@ while true; do
   for dir_name in *; do
     if [[ -d $dir_name ]]; then
       repo_name=$(basename $dir_name .git)
-      cd $dir_name
+      cd "$dir_name"
 
       changes=$(git fetch -v 2>&1 | grep -F -- '->')
 
