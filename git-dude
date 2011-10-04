@@ -69,9 +69,13 @@ while true; do
             commit_messages=$(git log $commit_range --pretty=format:'%s (%an)')
             notify $icon_path "New commits in $repo_name/$branch_name" "$commit_messages"
             ;;
-          *new*)
+          *new\ branch*)
             branch_name=$(echo "$line" | awk '{ print $4 }')
             notify $icon_path "New branch $repo_name/$branch_name"
+            ;;
+          *new\ tag*)
+            tag_name=$(echo "$line" | awk '{ print $4 }')
+            notify $icon_path "New tag $repo_name/$tag_name"
             ;;
         esac
       done <<< "$changes"
