@@ -51,7 +51,7 @@ while true; do
         changes=$(git svn fetch 2>&1 | grep -F -- ' = ' | awk 'BEGIN { FS = " " } ; { print $3 }')
         
         while read -r commit_hash; do 
-          if [[ "$commit_hash" = "" ]]; then
+          if [[ -z "$commit_hash" ]]; then
             break
           fi
           
