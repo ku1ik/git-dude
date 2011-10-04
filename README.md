@@ -33,6 +33,7 @@ On Linux:
 On OSX:
 
 * `growlnotify`, from [Growl Extras](http://growl.info/extras.php#growlnotify)
+  (Homebrew: _growlnotify_ package)
 
 ## Installation
 
