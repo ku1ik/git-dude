@@ -47,26 +47,42 @@ while true; do
       repo_name=$(basename $dir_name .git)
       cd "$dir_name"
 
-      changes=$(git fetch -v 2>&1 | grep -F -- '->')
+      if [[ $repo_name =~ .*-git-svn ]]; then # it's a git-svn repository
+        changes=$(git svn fetch 2>&1 | grep -F -- ' = ' | awk 'BEGIN { FS = " " } ; { print $3 }')
+        
+        while read -r commit_hash; do 
+          if [[ "$commit_hash" = "" ]]; then
+            break
+          fi
+          
+          commit_author=$(git cat-file -p $commit_hash | sed -n '3,3p' | awk 'BEGIN { FS = " " } { print $2 }') 
+          commit_message=$(git cat-file -p $commit_hash | sed -n '6,6p') 
 
-      while read -r line; do
-        case $line in
-          *..*)
-            commit_range=$(echo "$line" | awk '{ print $1 }')
-            branch_name=$(echo "$line" | awk '{ print $2 }')
-            commit_messages=$(git log $commit_range --pretty=format:'%s (%an)')
-            notify $icon_path "New commits in $repo_name/$branch_name" "$commit_messages"
-            ;;
-          *new\ branch*)
-            branch_name=$(echo "$line" | awk '{ print $4 }')
-            notify $icon_path "New branch $repo_name/$branch_name"
-            ;;
-          *new\ tag*)
-            tag_name=$(echo "$line" | awk '{ print $4 }')
-            notify $icon_path "New tag $repo_name/$tag_name"
-            ;;
-        esac
-      done <<< "$changes"
+          notify $icon_path "New commit in $repo_name ($commit_author)" "$commit_message"
+        done <<< "$changes"
+
+      else # it's a normal git repository        
+        changes=$(git fetch -v 2>&1 | grep -F -- '->')
+
+        while read -r line; do
+          case $line in
+            *..*)
+              commit_range=$(echo "$line" | awk '{ print $1 }')
+              branch_name=$(echo "$line" | awk '{ print $2 }')
+              commit_messages=$(git log $commit_range --pretty=format:'%s (%an)')
+              notify $icon_path "New commits in $repo_name/$branch_name" "$commit_messages"
+              ;;
+            *new\ branch*)
+              branch_name=$(echo "$line" | awk '{ print $4 }')
+              notify $icon_path "New branch $repo_name/$branch_name"
+              ;;
+            *new\ tag*)
+              tag_name=$(echo "$line" | awk '{ print $4 }')
+              notify $icon_path "New tag $repo_name/$tag_name"
+              ;;
+          esac
+        done <<< "$changes"
+      fi
 
       cd - &>/dev/null
     fi
