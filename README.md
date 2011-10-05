@@ -52,8 +52,8 @@ _~/.git-dude_:
 
 Clone some repositories:
 
-    $ git clone --mirror some-repo-url
-    $ git clone --mirror other-repo-url
+    $ git clone --mirror https://github.com/joelthelion/autojump.git
+    $ git clone --mirror git://github.com/pyromaniac/hoof.git
 
 I recommend `git clone --mirror` - it doesn't checkout working directory so it
 saves some disk space for bigger projects.
@@ -61,7 +61,7 @@ saves some disk space for bigger projects.
 Symlinked repositories work too. This way you can monitor already cloned
 projects:
 
-    $ ln -s ~/code/existing-repo .
+    $ ln -s ~/code/tmuxinator .
 
 Now run this to monitor _pwd_:
 
