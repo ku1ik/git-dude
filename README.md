@@ -76,6 +76,14 @@ to monitor instead of _pwd_.
 This way you can have multiple _dude directories_ each being monitored by
 separate git-dude process.
 
+## Usage with git-svn
+
+git-dude is also a live saivor when forced to work with svn teams, who are yet to be enlightened by git.
+Simply follow the above steps for setting up git-dude, but name the symlink to the repository: `any-repository-git-svn`.
+
+git-dude will then use git-svn instead of pure git to pull in changes for this repository.
+But seriously, just make the team switch over to git...
+
 ## Configuration
 
 Set how often git-dude should check for changes (in seconds, default: 60):
