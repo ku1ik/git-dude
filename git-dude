@@ -49,20 +49,35 @@ while true; do
       repo_name=$(basename $dir_name .git)
       cd "$dir_name"
 
-      changes=$(git fetch -v 2>&1 | grep -F -- '->')
+      if [[ $(grep svn-remote .git/config 2>/dev/null) ]]; then
+        revs=$(git svn fetch 2>/dev/null | grep -F -- ' = ' | awk '{ print $3 }')
+        if [[ -n "$revs" ]]; then
+          changes="$(echo "$revs" | head -1)$changes~..$changes$(echo "$revs" | tail -1)"
+        fi
+      else
+        changes=$(git fetch 2>&1 | grep -F -- '->')
+      fi
+
 
       while read -r line; do
         case $line in
           *..*)
             commit_range=$(echo "$line" | awk '{ print $1 }')
-            branch_name=$(echo "$line" | awk '{ print $2 }')
             commit_messages=$(git log $commit_range --pretty=format:'%s (%an)')
-            notify $icon_path "New commits in $repo_name/$branch_name" "$commit_messages"
+
+            branch_name=$(echo "$line" | awk '{ print $2 }')
+            if [[ -n "$branch_name" ]]; then
+              branch_name="/$branch_name"
+            fi
+
+            notify $icon_path "New commits in $repo_name$branch_name" "$commit_messages"
             ;;
+
           *new\ branch*)
             branch_name=$(echo "$line" | awk '{ print $4 }')
             notify $icon_path "New branch $repo_name/$branch_name"
             ;;
+
           *new\ tag*)
             tag_name=$(echo "$line" | awk '{ print $4 }')
             notify $icon_path "New tag $repo_name/$tag_name"
