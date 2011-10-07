@@ -49,10 +49,11 @@ while true; do
       repo_name=$(basename $dir_name .git)
       cd "$dir_name"
 
+      changes=""
       if [[ $(grep svn-remote .git/config 2>/dev/null) ]]; then
         revs=$(git svn fetch 2>/dev/null | grep -F -- ' = ' | awk '{ print $3 }')
         if [[ -n "$revs" ]]; then
-          changes="$(echo "$revs" | head -1)$changes~..$changes$(echo "$revs" | tail -1)"
+          changes="$(echo "$revs" | head -1)~..$(echo "$revs" | tail -1)"
         fi
       else
         changes=$(git fetch 2>&1 | grep -F -- '->')
