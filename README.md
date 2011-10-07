@@ -41,6 +41,9 @@ On OSX:
     $ curl -skL https://github.com/sickill/git-dude/raw/master/git-dude >~/bin/git-dude
     $ chmod +x ~/bin/git-dude
 
+\* Make sure `~/bin` is in your `$PATH` or put `git-dude` script somewhere else
+on your `$PATH`.
+
 ## Usage
 
 git-dude iterates over repositories that live inside _the dude directory_. This
