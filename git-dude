@@ -49,7 +49,7 @@ while true; do
       repo_name=$(basename $dir_name .git)
       cd "$dir_name"
 
-      changes=$(git fetch -v 2>&1 | grep -F -- '->' | sed -E 's/^\s+\+\s+//')
+      changes=$(git fetch 2>&1 | grep -F -- '->' | sed -E 's/^\s+\+\s+//')
 
       while read -r line; do
         case $line in
