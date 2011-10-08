@@ -23,10 +23,6 @@
 interval=$(git config dude.interval)
 interval=${interval:-60}
 
-icon_path=$(git config dude.icon)
-icon_path=${icon_path:-`pwd`/icon.png}
-eval icon_path=$icon_path # to expand ~
-
 export LC_ALL=C # make sure git talks english
 
 [[ -d $1 ]] && cd $1
@@ -50,6 +46,10 @@ while true; do
       cd "$dir_name"
 
       changes=$(git fetch 2>&1 | grep -F -- '->' | sed -E 's/^\s+\+\s+//')
+
+      icon_path=$(git config dude.icon)
+      icon_path=${icon_path:-`pwd`/icon.png}
+      eval icon_path=$icon_path # to expand ~
 
       while read -r line; do
         case $line in

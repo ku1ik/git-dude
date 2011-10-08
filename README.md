@@ -81,6 +81,8 @@ separate git-dude process.
 
 ## Configuration
 
+### Global
+
 Set how often git-dude should check for changes (in seconds, default: 60):
 
     $ git config --global dude.interval 30
@@ -88,6 +90,13 @@ Set how often git-dude should check for changes (in seconds, default: 60):
 Set path to icon used by desktop notifications (default: none):
 
     $ git config --global dude.icon ~/.git-dude/github_32.png
+
+### Per-repository
+
+Set path to icon used by desktop notifications for this repository (default:
+taken from global setting):
+
+    $ git config dude.icon ~/.git-dude/dm-core/datamapper.png
 
 ## Author
 
