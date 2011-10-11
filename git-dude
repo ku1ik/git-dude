@@ -41,8 +41,8 @@ function notify() {
 
 while true; do
   for dir_name in *; do
-    if [[ -d $dir_name && $(cd $dir_name; git rev-parse --git-dir 2>/dev/null) ]]; then
-      repo_name=$(basename $dir_name .git)
+    if [[ -d "$dir_name" && $(cd "$dir_name"; git rev-parse --git-dir 2>/dev/null) ]]; then
+      repo_name=$(basename "$dir_name" .git)
       cd "$dir_name"
 
       changes=$(git fetch 2>&1 | grep -F -- '->' | sed -E 's/^\s+\+\s+//')
