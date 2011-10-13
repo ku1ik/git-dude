@@ -49,6 +49,8 @@ or
 
 * [Growl for Linux](http://mattn.github.com/growl4linux) and [gntp-send.exe](http://github.com/mattn/gntp-send)
 
+And [iconv.exe](http://gnuwin32.sourceforge.net/packages/libiconv.htm) is required.
+
 ## Installation
 
     $ curl -skL https://github.com/sickill/git-dude/raw/master/git-dude >~/bin/git-dude
