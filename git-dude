@@ -30,6 +30,16 @@ export LC_ALL=C # make sure git talks english
 function notify() {
   if [ $(which notify-send 2>/dev/null) ]; then
     notify-send -i "$1" "$2" "$3"
+  elif [ $(which gntp-send.exe 2>/dev/null) ]; then
+    title=$(echo $2 | iconv -f utf-8 -t char)
+    message=$(echo $3 | iconv -f utf-8 -t char)
+    gntp-send.exe "$title" "$message" "$1"
+  elif [ $(which growlnotify.exe 2>/dev/null) ]; then
+    title=$(echo $2 | iconv -f utf-8 -t char)
+    message=$(echo $3 | iconv -f utf-8 -t char)
+    growlnotify.exe /i:"$1" /t:"$title" "$message"
+  elif [ $(which gntp-send 2>/dev/null) ]; then
+    gntp-send "$2" "$3" "$1"
   elif [ $(which growlnotify 2>/dev/null) ]; then
     growlnotify --image "$1" -m "$3" "$2"
   elif [ $(which kdialog 2>/dev/null) ]; then

@@ -24,17 +24,30 @@ OSX:
 
 ![git-dude on Mac OSX](https://github.com/downloads/sickill/git-dude/git-dude-osx-shot.png)
 
+Windows:
+
+![git-dude on Windows](https://github.com/downloads/mattn/git-dude/git-dude-windows-shot.png)
+
 ## Requirements
 
 On Linux:
 
 * `notify-send` on Gnome (Fedora: _libnotify_ package, Ubuntu: _libnotify-bin_ package)
 * `kdialog` on KDE (included in KDE)
+* [Growl for Linux](http://mattn.github.com/growl4linux) and [gntp-send](http://github.com/mattn/gntp-send) (ppa: [growl4linux](https://launchpad.net/~mattn/+archive/growl-for-linux), [gntp-send](https://launchpad.net/~mattn/+archive/gntp-send))
 
 On OSX:
 
 * `growlnotify`, from [Growl Extras](http://growl.info/extras.php#growlnotify)
   (Homebrew: _growlnotify_ package)
+
+On Windows:
+
+* [Growl for Windows](http://www.growlforwindows.com/gfw/default.aspx) and [growlnotify.exe](http://www.growlforwindows.com/gfw/help/growlnotify.aspx)
+
+or
+
+* [Growl for Linux](http://mattn.github.com/growl4linux) and [gntp-send.exe](http://github.com/mattn/gntp-send)
 
 ## Installation
 
@@ -43,6 +56,42 @@ On OSX:
 
 \* Make sure `~/bin` is in your `$PATH` or put `git-dude` script somewhere else
 on your `$PATH`.
+
+On windows, you should use `ssh-agent.exe` included in msysgit. save following batch file to git/bin as `ssh-askpass.bat`.
+
+    @echo off
+    set SSH_CMD_PATH=c:/progra~1/git/bin
+    if "%1" == "-f" goto doit
+    if "%1" == "-s" goto session
+    if not "%SSH_AGENT_PID%" == "" goto end
+    goto doit
+    
+    :session
+    for /f "eol=; tokens=1,2 delims==;" %%1 in ('%SSH_CMD_PATH%/ssh-agent.exe') do (
+     if "%%1" == "SSH_AUTH_SOCK" setx SSH_AUTH_SOCK %%2 & set SSH_AUTH_SOCK=%%2
+     if "%%1" == "SSH_AGENT_PID" setx SSH_AGENT_PID %%2 & set SSH_AGENT_PID=%%2
+    )
+    goto bottom
+    
+    :doit
+    for /f "eol=; tokens=1,2 delims==;" %%1 in ('%SSH_CMD_PATH%/ssh-agent.exe') do (
+     if "%%1" == "SSH_AUTH_SOCK" set SSH_AUTH_SOCK=%%2
+     if "%%1" == "SSH_AGENT_PID" set SSH_AGENT_PID=%%2
+    )
+    
+    :bottom
+    %SSH_CMD_PATH%/ssh-add
+    :end
+
+Open command prompt and type following.
+
+    C:\github\myrepo>ssh-askpass.bat
+    Enter passphrase for /c/docume~1/mattn/.ssh/id_rsa:
+    Identity added: /c/docume~1/mattn/.ssh/id_rsa (/c/docume~1/mattn/.ssh/id_rsa)
+    
+    C:\github\myrepo>git dude
+
+Note that this password session is temporary. If you want to use the session as permanent, type `ssh-askpass.bat -s`. You can use the session while you are logged in on windows.
 
 ## Usage
 
