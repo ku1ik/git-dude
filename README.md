@@ -98,6 +98,10 @@ taken from global setting):
 
     $ git config dude.icon ~/.git-dude/dm-core/datamapper.png
 
+Tell git-dude to ignore specific repository (if you want to _unmonitor_ it):
+
+    $ git config dude.ignore true
+
 ## Author
 
 Marcin Kulik (http://ku1ik.com/ | @sickill)

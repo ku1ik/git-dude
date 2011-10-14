@@ -42,6 +42,11 @@ function notify() {
 while true; do
   for dir_name in *; do
     if [[ -d "$dir_name" && $(cd "$dir_name"; git rev-parse --git-dir 2>/dev/null) ]]; then
+
+      if [[ $(cd "$dir_name"; git config dude.ignore) == true ]]; then
+        continue
+      fi
+
       repo_name=$(basename "$dir_name" .git)
       cd "$dir_name"
 
