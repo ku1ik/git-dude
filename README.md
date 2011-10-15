@@ -48,7 +48,7 @@ on your `$PATH`.
 
 Git-dude can be installed with the following command:
 
-`brew install https://raw.github.com/gist/1289314/022cd33fc366378552dc3527d72b994568644df1/git-dude.rb`
+`brew install https://raw.github.com/gist/1289314/git-dude.rb`
 
 The homebrew formula lives [here](https://gist.github.com/1289314).
 
