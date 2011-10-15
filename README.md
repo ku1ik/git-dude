@@ -44,6 +44,14 @@ On OSX:
 \* Make sure `~/bin` is in your `$PATH` or put `git-dude` script somewhere else
 on your `$PATH`.
 
+### Homebrew
+
+Git-dude can be installed with the following command:
+
+`brew install https://raw.github.com/gist/1289314/git-dude.rb`
+
+The homebrew formula lives [here](https://gist.github.com/1289314).
+
 ## Usage
 
 git-dude iterates over repositories that live inside _the dude directory_. This
