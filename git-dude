@@ -23,6 +23,8 @@
 interval=$(git config dude.interval)
 interval=${interval:-60}
 
+app_name=$(basename $0)
+
 export LC_ALL=C # make sure git talks english
 
 [[ -d $1 ]] && cd $1
@@ -31,7 +33,7 @@ function notify() {
   if [ $(which notify-send 2>/dev/null) ]; then
     notify-send -i "$1" "$2" "$3"
   elif [ $(which growlnotify 2>/dev/null) ]; then
-    growlnotify --image "$1" -m "$3" "$2"
+    growlnotify -n "$app_name" --image "$1" -m "$3" "$2"
   elif [ $(which kdialog 2>/dev/null) ]; then
     kdialog --icon $1 --title "$2" --passivepopup "$3"
   else
