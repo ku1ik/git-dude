@@ -99,6 +99,12 @@ Set path to icon used by desktop notifications (default: none):
 
     $ git config --global dude.icon ~/.git-dude/github_32.png
 
+Set custom notification command (`$TITLE`, `$DESCRIPTION` and `$ICON_PATH`
+environment variables are set when invoking notification command):
+
+    $ git config --global dude.notify-command 'gntp-send "$TITLE" "$DESCRIPTION" "$ICON_PATH"'
+    $ git config --global dude.notify-command 'echo -e "$TITLE\n\n\n$DESCRIPTION" | espeak --stdin -k20 -ven+12'
+
 ### Per-repository
 
 Set path to icon used by desktop notifications for this repository (default:
