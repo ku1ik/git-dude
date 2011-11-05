@@ -20,6 +20,9 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # Distributed under the GNU General Public License, version 2.0.
 
+set -e
+set -u
+
 interval=$(git config dude.interval)
 interval=${interval:-60}
 
@@ -66,11 +69,11 @@ while true; do
             ;;
           *new\ branch*)
             branch_name=$(echo "$line" | awk '{ print $4 }')
-            notify $icon_path "New branch $repo_name/$branch_name"
+            notify $icon_path "New branch $repo_name/$branch_name" ""
             ;;
           *new\ tag*)
             tag_name=$(echo "$line" | awk '{ print $4 }')
-            notify $icon_path "New tag $repo_name/$tag_name"
+            notify $icon_path "New tag $repo_name/$tag_name" ""
             ;;
         esac
       done <<< "$changes"
