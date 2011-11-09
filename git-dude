@@ -21,9 +21,8 @@
 # Distributed under the GNU General Public License, version 2.0.
 
 set -e
-set -u
 
-interval=$(git config dude.interval)
+interval=$(git config dude.interval || true)
 interval=${interval:-60}
 
 export LC_ALL=C # make sure git talks english
@@ -55,7 +54,7 @@ function notify() {
   echo
 }
 
-[[ -d $1 ]] && cd $1
+[[ -d "$1" ]] && cd $1
 
 while true; do
   for dir_name in *; do
@@ -70,7 +69,7 @@ while true; do
 
       changes=$(git fetch 2>&1 | grep -F -- '->' | sed -E 's/^\s+\+\s+//')
 
-      icon_path=$(git config dude.icon)
+      icon_path=$(git config dude.icon || true)
       icon_path=${icon_path:-`pwd`/icon.png}
       eval icon_path=$icon_path # to expand ~
 
