@@ -20,26 +20,42 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # Distributed under the GNU General Public License, version 2.0.
 
-interval=$(git config dude.interval)
-interval=${interval:-60}
+set -e
 
+interval=$(git config dude.interval || true)
+interval=${interval:-60}
 app_name=$(basename $0)
 
 export LC_ALL=C # make sure git talks english
 
-[[ -d $1 ]] && cd $1
+if [[ $(git config dude.notify-command) ]]; then
+  notify_cmd=$(git config dude.notify-command)
+elif [ $(which notify-send 2>/dev/null) ]; then
+  notify_cmd='notify-send -i "$ICON_PATH" "$TITLE" "$DESCRIPTION"'
+elif [ $(which growlnotify 2>/dev/null) ]; then
+  notify_cmd='growlnotify -n "$app_name" --image "$ICON_PATH" -m "$DESCRIPTION" "$TITLE"'
+elif [ $(which kdialog 2>/dev/null) ]; then
+  notify_cmd='kdialog --icon $ICON_PATH --title "$TITLE" --passivepopup "$DESCRIPTION"'
+fi
 
 function notify() {
-  if [ $(which notify-send 2>/dev/null) ]; then
-    notify-send -i "$1" "$2" "$3"
-  elif [ $(which growlnotify 2>/dev/null) ]; then
-    growlnotify -n "$app_name" --image "$1" -m "$3" "$2"
-  elif [ $(which kdialog 2>/dev/null) ]; then
-    kdialog --icon $1 --title "$2" --passivepopup "$3"
-  else
-    echo $2; echo $3
+  local ICON_PATH="$1"
+  local TITLE="$2"
+  local DESCRIPTION="$3"
+
+  if [ -n "$notify_cmd" ]; then
+    eval $notify_cmd
   fi
+
+  date "+%T %D"
+  echo "$TITLE"
+  if [ -n "$DESCRIPTION" ]; then
+    echo "$DESCRIPTION"
+  fi
+  echo
 }
+
+[[ -d "$1" ]] && cd $1
 
 while true; do
   for dir_name in *; do
@@ -54,7 +70,7 @@ while true; do
 
       changes=$(git fetch 2>&1 | grep -F -- '->' | sed -E 's/^\s+\+\s+//')
 
-      icon_path=$(git config dude.icon)
+      icon_path=$(git config dude.icon || true)
       icon_path=${icon_path:-`pwd`/icon.png}
       eval icon_path=$icon_path # to expand ~
 
@@ -68,11 +84,11 @@ while true; do
             ;;
           *new\ branch*)
             branch_name=$(echo "$line" | awk '{ print $4 }')
-            notify $icon_path "New branch $repo_name/$branch_name"
+            notify $icon_path "New branch $repo_name/$branch_name" ""
             ;;
           *new\ tag*)
             tag_name=$(echo "$line" | awk '{ print $4 }')
-            notify $icon_path "New tag $repo_name/$tag_name"
+            notify $icon_path "New tag $repo_name/$tag_name" ""
             ;;
         esac
       done <<< "$changes"
