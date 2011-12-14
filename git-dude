@@ -24,6 +24,7 @@ set -e
 
 interval=$(git config dude.interval || true)
 interval=${interval:-60}
+app_name=$(basename $0)
 
 export LC_ALL=C # make sure git talks english
 
@@ -32,7 +33,7 @@ if [[ $(git config dude.notify-command) ]]; then
 elif [ $(which notify-send 2>/dev/null) ]; then
   notify_cmd='notify-send -i "$ICON_PATH" "$TITLE" "$DESCRIPTION"'
 elif [ $(which growlnotify 2>/dev/null) ]; then
-  notify_cmd='growlnotify --image "$ICON_PATH" -m "$DESCRIPTION" "$TITLE"'
+  notify_cmd='growlnotify -n "$app_name" --image "$ICON_PATH" -m "$DESCRIPTION" "$TITLE"'
 elif [ $(which kdialog 2>/dev/null) ]; then
   notify_cmd='kdialog --icon $ICON_PATH --title "$TITLE" --passivepopup "$DESCRIPTION"'
 fi
