@@ -116,6 +116,81 @@ Tell git-dude to ignore specific repository (if you want to _unmonitor_ it):
 
     $ git config dude.ignore true
 
+## Running git-dude in background
+
+Currently you must have git-dude running in its own dedicated tab/screen. To avoid
+this minor inconvenience, append the following function to your ```~/.bashrc```
+
+```
+# Git dude repo monitoring service
+# arg1: "stop" or "start"
+function gd(){
+    val="$1"
+
+    if [ $val == "start" ]; then
+        git dude ~/.git-dude &>/dev/null &
+        printf "git-dude started\n"
+    elif [ $val == "stop" ];    then
+        ps aux | grep 'git[ -]dude' | awk '{print $2}' | xargs sudo kill -9
+        printf "git-dude stopped\n"
+    else
+        printf "$val not valid. Use start/stop\n"
+    fi
+}
+```
+
+You can then start git-dude via
+
+    $ gd start
+
+Similarly, you can stop git-dude via
+
+    $ gd stop
+
+## Running git-dude automatically on login
+
+In addition to running the git-dude process in the background, we can also
+set git-dude to start automatically once you log in. We will do so by implementing
+OS X's [Login Hooks](http://support.apple.com/kb/HT2420). 
+
+Change to your ```/Library``` directory and make a ```Hooks``` directory.
+
+    $ cd /Library
+    $ mkdir Hooks
+    $ cd Hooks
+
+Now create a file called ```login``` in your favorite text editor.
+
+    $ vim login
+
+Paste the following into the ```login``` file and save.
+
+```
+#!/bin/bash
+/path/to/git dude /Users/YourUser/.git-dude &>/dev/null &
+```
+
+You can find your ```/path/to/git``` via 
+
+    $ which git
+
+**NOTE**: It's important that you reference absolute paths in your ```login``` script.
+
+Now we need to make this ```login``` file executable.
+
+    $ chmod +x login
+
+We now add the script to the login hook.
+
+    $ sudo defaults write com.apple.loginwindow LoginHook /Library/Hooks/login
+
+Note that this modifies the ```/var/root/Library/Preferences/com.apple.loginwindow``` file if you ever want to undo it.
+
+Feel free to log out and log back in. To check and see if the git-dude process is 
+running, you can search for the process via
+
+    $ ps aux | grep "git-dude"
+
 ## Author
 
 Marcin Kulik (http://ku1ik.com/ | @sickill)
