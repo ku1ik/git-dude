@@ -139,6 +139,10 @@ function gd(){
 }
 ```
 
+Reload your ```~/.bashrc``` into your session.
+
+    $ source ~/.bashrc
+
 You can then start git-dude via
 
     $ gd start
