@@ -116,14 +116,6 @@ Tell git-dude to ignore specific repository (if you want to _unmonitor_ it):
 
     $ git config dude.ignore true
 
-## File versioning
-
-git-dude doesn't support any kind of file versioning at the moment. It's just a
-glue script that uses rsync for the real job.
-
-However there is a discussion about possible solutions here:
-[github.com/sickill/bitpocket/issues/15](https://github.com/sickill/bitpocket/issues/15)
-
 ## Author
 
 Marcin Kulik (http://ku1ik.com/ | @sickill)
