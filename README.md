@@ -122,20 +122,35 @@ Currently you must have git-dude running in its own dedicated tab/screen. To avo
 this minor inconvenience, append the following function to your ```~/.bashrc```
 
 ```
-# Git dude repo monitoring service
-# arg1: "stop" or "start"
-function gd(){
-    val="$1"
+# Create a new repo clone  and immediately fetch to avoid 
+# permission issue  with root when running in the background
+# arg1: repo URL
+function watch_repo(){
+	
+	# The folder where git-dude watches repos
+	gitDudeWatchFolder=~/.git-dude
+	cd $gitDudeWatchFolder
 
-    if [ $val == "start" ]; then
-        git dude ~/.git-dude &>/dev/null &
-        printf "git-dude started\n"
-    elif [ $val == "stop" ];    then
-        ps aux | grep 'git[ -]dude' | awk '{print $2}' | xargs sudo kill -9
-        printf "git-dude stopped\n"
-    else
-        printf "$val not valid. Use start/stop\n"
-    fi
+	repoURL=$1
+	git clone --mirror $repoURL
+
+	# If git clone not successful, exit out with an
+	# unsuccessful return status of 1
+	if [ $? -ne 0 ];
+	then
+		return 1
+	fi
+
+	# Get the directory of the repo just pulled
+	repoDir=$(basename $repoURL)
+
+	# We need to `git fetch` immediately so that FETCH_HEAD is owned by the
+	# user and NOT by root when running is a login hook
+	cd $repoDir
+	git fetch
+
+	cd $gitDudeWatchFolder
+	echo "Now watching $repoDir"
 }
 ```
 
