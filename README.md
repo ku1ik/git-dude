@@ -24,6 +24,10 @@ OSX:
 
 ![git-dude on Mac OSX](https://github.com/downloads/sickill/git-dude/git-dude-osx-shot.png)
 
+Haiku:
+
+![git-dude on Haiku](https://github.com/downloads/sickill/git-dude/git-dude-haiku-shot.png)
+
 ## Requirements
 
 On Linux:
