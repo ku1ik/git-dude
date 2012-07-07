@@ -36,6 +36,8 @@ elif [ $(which growlnotify 2>/dev/null) ]; then
   notify_cmd='growlnotify -n "$app_name" --image "$ICON_PATH" -m "$DESCRIPTION" "$TITLE"'
 elif [ $(which kdialog 2>/dev/null) ]; then
   notify_cmd='kdialog --icon $ICON_PATH --title "$TITLE" --passivepopup "$DESCRIPTION"'
+elif [ $(which notify 2>/dev/null) ]; then
+  notify_cmd='notify --type information --icon $ICON_PATH --group "Git Commit" --title "$TITLE" "$DESCRIPTION"'
 fi
 
 function notify() {
