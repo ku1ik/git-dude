@@ -74,6 +74,7 @@ while true; do
 
       icon_path=$(git config dude.icon || true)
       icon_path=${icon_path:-`pwd`/icon.png}
+      icon_path=${icon_path// /\\ } # escape spaces before eval
       eval icon_path=$icon_path # to expand ~
 
       while read -r line; do
