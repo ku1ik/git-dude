@@ -38,26 +38,38 @@ elif [ $(which kdialog 2>/dev/null) ]; then
   notify_cmd='kdialog --icon $ICON_PATH --title "$TITLE" --passivepopup "$DESCRIPTION"'
 elif [ $(which notify 2>/dev/null) ]; then
   notify_cmd='notify --type information --icon "$ICON_PATH" --group "Git Commit" --title "$TITLE" "$DESCRIPTION"'
+elif [ $(which terminal-notifier 2>/dev/null) ]; then
+  notify_cmd='terminal-notifier -title "$TITLE" -message "$DESCRIPTION" -open "$URL"'
 fi
 
 function dudenotify() {
   local ICON_PATH="$1"
   local TITLE="$2"
   local DESCRIPTION="$3"
+  local URL="$4"
 
   if [ -n "$notify_cmd" ]; then
-    eval $notify_cmd
+    eval "$notify_cmd 2>/dev/null"
+    date "+%T %D"
+    echo "$TITLE"
+    if [ -n "$DESCRIPTION" ]; then
+      echo "$DESCRIPTION"
+    fi
+
+    if [ -n "$URL" ]; then
+      echo "$URL"
+    fi
+  else
+    echo "Sorry, you must install a notifier. Exiting ..."
+    exit 1
   fi
 
-  date "+%T %D"
-  echo "$TITLE"
-  if [ -n "$DESCRIPTION" ]; then
-    echo "$DESCRIPTION"
-  fi
   echo
 }
 
 [[ -d "$1" ]] && cd $1
+
+echo "Looking for changes in $(pwd) repos every $interval/s"
 
 while true; do
   for dir_name in *; do
@@ -70,12 +82,23 @@ while true; do
       repo_name=$(basename "$dir_name" .git)
       cd "$dir_name"
 
+
       changes=$(git fetch 2>&1 | grep -F -- '->' | sed 's/^ [+*=!-] //')
+
+      if [ -n "$changes" ]; then
+        echo "  new commits for $(pwd)"
+      else
+        echo "  nothing new for $(pwd)"
+      fi
 
       icon_path=$(git config dude.icon || true)
       icon_path=${icon_path:-`pwd`/icon.png}
       icon_path=${icon_path// /\\ } # escape spaces before eval
       eval icon_path=$icon_path # to expand ~
+
+      if [[ $(git config --local -l) =~ github.com[:/]([A-z0-9_-]+) ]]; then
+        url="https://github.com/${BASH_REMATCH[1]}/$repo_name"
+      fi
 
       while read -r line; do
         case $line in
@@ -83,15 +106,25 @@ while true; do
             commit_range=$(echo "$line" | awk '{ print $1 }')
             branch_name=$(echo "$line" | awk '{ print $2 }')
             commit_messages=$(git log $commit_range --pretty=format:'%s (%an)')
-            dudenotify $icon_path "New commits in $repo_name/$branch_name" "$commit_messages"
+            if [ -n "$url" ]; then
+              compare=$(echo "$line" | awk '{ print $1 }' | sed -E 's/[^\.]\.\.[^\.]/.../')
+              commit_url="$url/compare/$compare"
+            fi
+            dudenotify $icon_path "New commits in $repo_name/$branch_name" "$commit_messages" "$commit_url"
             ;;
           *new\ branch*)
             branch_name=$(echo "$line" | awk '{ print $3 }')
-            dudenotify $icon_path "New branch $repo_name/$branch_name" ""
+            if [ -n "$url" ]; then
+              commit_url="$url/commits/$branch_name"
+            fi
+            dudenotify $icon_path "New branch $repo_name/$branch_name" "Added the branch $branch_name" "$commit_url"
             ;;
           *new\ tag*)
             tag_name=$(echo "$line" | awk '{ print $3 }')
-            dudenotify $icon_path "New tag $repo_name/$tag_name" ""
+            if [ -n "$url" ]; then
+              commit_url="$url/commits/$tag_name"
+            fi
+            dudenotify $icon_path "New tag $repo_name/$tag_name" "Added the tag $tag_name" "$commit_url"
             ;;
         esac
       done <<< "$changes"
