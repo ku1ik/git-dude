@@ -23,6 +23,7 @@ Ubuntu:
 OSX:
 
 ![git-dude on Mac OSX](https://github.com/downloads/sickill/git-dude/git-dude-osx-shot.png)
+
 ![git-dude on Mac OSX](http://f.cl.ly/items/0W2H200j441K392G160H/git-dude-notification-center.png)
 
 Haiku:
