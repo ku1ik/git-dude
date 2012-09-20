@@ -134,3 +134,7 @@ Tell git-dude to ignore specific repository (if you want to _unmonitor_ it):
 ## Author
 
 Marcin Kulik (http://ku1ik.com/ | @sickill)
+
+## Contributors
+
+Davide D'Agostino (http://daddye.it | @DAddYE)

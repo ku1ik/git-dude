@@ -107,7 +107,7 @@ while true; do
             branch_name=$(echo "$line" | awk '{ print $2 }')
             commit_messages=$(git log $commit_range --pretty=format:'%s (%an)')
             if [ -n "$url" ]; then
-              compare=$(echo "$line" | awk '{ print $1 }' | sed -E 's/[^\.]\.\.[^\.]/.../')
+              compare=$(echo "$line" | awk '{ print $1 }' | sed -E 's/\.\./.../')
               commit_url="$url/compare/$compare"
             fi
             dudenotify $icon_path "New commits in $repo_name/$branch_name" "$commit_messages" "$commit_url"
