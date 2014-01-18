@@ -52,7 +52,7 @@ on your `$PATH`.
 
 Git-dude can be installed with the following command:
 
-`brew install https://raw.github.com/gist/1289314/git-dude.rb --HEAD`
+`brew install https://gist.github.com/lukaszkorecki/1289314/raw/022cd33fc366378552dc3527d72b994568644df1/git-dude.rb --HEAD`
 
 The homebrew formula lives [here](https://gist.github.com/1289314).
 
