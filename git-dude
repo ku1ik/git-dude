@@ -57,48 +57,69 @@ function dudenotify() {
   echo
 }
 
+if [[ $(git config dude.screensaver-command) ]]; then
+  screensaver_cmd=$(git config dude.screensaver-command)
+elif [ $(which gnome-screensaver-command 2>/dev/null) ]; then
+  screensaver_cmd='LANG=C gnome-screensaver-command -q | grep -q "is active"'
+fi
+
+function screensaver() {
+  if [ -n "$screensaver_cmd" ]; then
+    eval $screensaver_cmd
+    if [[ $? != 0 ]]; then
+      return 1
+    fi
+  fi
+
+  # if we cannot be certain, default to saying screensaver is not
+  # active in order to run git-dude on every loop
+  return 0
+}
+
 [[ -d "$1" ]] && cd $1
 
 while true; do
-  for dir_name in *; do
-    if [[ -d "$dir_name" && $(cd "$dir_name"; git rev-parse --git-dir 2>/dev/null) ]]; then
+  if ! screensaver; then
+    for dir_name in *; do
+      if [[ -d "$dir_name" && $(cd "$dir_name"; git rev-parse --git-dir 2>/dev/null) ]]; then
 
-      if [[ $(cd "$dir_name"; git config dude.ignore) == true ]]; then
-        continue
+        if [[ $(cd "$dir_name"; git config dude.ignore) == true ]]; then
+          continue
+        fi
+
+        repo_name=$(basename "$dir_name" .git)
+        cd "$dir_name"
+
+        changes=$(git fetch 2>&1 | grep -F -- '->' | sed 's/^ [+*=!-] //')
+
+        icon_path=$(git config dude.icon || true)
+        icon_path=${icon_path:-`pwd`/icon.png}
+        icon_path=${icon_path// /\\ } # escape spaces before eval
+        eval icon_path=$icon_path # to expand ~
+
+        while read -r line; do
+          case $line in
+            *..*)
+              commit_range=$(echo "$line" | awk '{ print $1 }')
+              branch_name=$(echo "$line" | awk '{ print $2 }')
+              commit_messages=$(git log $commit_range --pretty=format:'%s (%an)')
+              dudenotify $icon_path "New commits in $repo_name/$branch_name" "$commit_messages"
+              ;;
+            *new\ branch*)
+              branch_name=$(echo "$line" | awk '{ print $3 }')
+              dudenotify $icon_path "New branch $repo_name/$branch_name" ""
+              ;;
+            *new\ tag*)
+              tag_name=$(echo "$line" | awk '{ print $3 }')
+              dudenotify $icon_path "New tag $repo_name/$tag_name" ""
+              ;;
+          esac
+        done <<< "$changes"
+
+        cd - &>/dev/null
       fi
-
-      repo_name=$(basename "$dir_name" .git)
-      cd "$dir_name"
-
-      changes=$(git fetch 2>&1 | grep -F -- '->' | sed 's/^ [+*=!-] //')
-
-      icon_path=$(git config dude.icon || true)
-      icon_path=${icon_path:-`pwd`/icon.png}
-      icon_path=${icon_path// /\\ } # escape spaces before eval
-      eval icon_path=$icon_path # to expand ~
-
-      while read -r line; do
-        case $line in
-          *..*)
-            commit_range=$(echo "$line" | awk '{ print $1 }')
-            branch_name=$(echo "$line" | awk '{ print $2 }')
-            commit_messages=$(git log $commit_range --pretty=format:'%s (%an)')
-            dudenotify $icon_path "New commits in $repo_name/$branch_name" "$commit_messages"
-            ;;
-          *new\ branch*)
-            branch_name=$(echo "$line" | awk '{ print $3 }')
-            dudenotify $icon_path "New branch $repo_name/$branch_name" ""
-            ;;
-          *new\ tag*)
-            tag_name=$(echo "$line" | awk '{ print $3 }')
-            dudenotify $icon_path "New tag $repo_name/$tag_name" ""
-            ;;
-        esac
-      done <<< "$changes"
-
-      cd - &>/dev/null
-    fi
-  done
+    done
+  fi
 
   sleep $interval
 done
