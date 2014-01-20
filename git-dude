@@ -90,7 +90,8 @@ while true; do
         repo_name=$(basename "$dir_name" .git)
         cd "$dir_name"
 
-        changes=$(git fetch 2>&1 | grep -F -- '->' | sed 's/^ [+*=!-] //')
+        remote=$(git config dude.remote || true)
+        changes=$(git fetch $remote 2>&1 | grep -F -- '->' | sed 's/^ [+*=!-] //')
 
         icon_path=$(git config dude.icon || true)
         icon_path=${icon_path:-`pwd`/icon.png}
@@ -103,15 +104,27 @@ while true; do
               commit_range=$(echo "$line" | awk '{ print $1 }')
               branch_name=$(echo "$line" | awk '{ print $2 }')
               commit_messages=$(git log $commit_range --pretty=format:'%s (%an)')
-              dudenotify $icon_path "New commits in $repo_name/$branch_name" "$commit_messages"
+              notify_message="New commits in $repo_name/$branch_name"
+              if [ -n "$remote" ]; then
+                  notify_message="${notify_message} at $remote"
+              fi
+              dudenotify $icon_path "$notify_message" "$commit_messages"
               ;;
             *new\ branch*)
               branch_name=$(echo "$line" | awk '{ print $3 }')
-              dudenotify $icon_path "New branch $repo_name/$branch_name" ""
+              notify_message="New branch $repo_name/$branch_name"
+              if [ -n "$remote" ]; then
+                  notify_message="${notify_message} at $remote"
+              fi
+              dudenotify $icon_path "$notify_message" ""
               ;;
             *new\ tag*)
               tag_name=$(echo "$line" | awk '{ print $3 }')
-              dudenotify $icon_path "New tag $repo_name/$tag_name" ""
+              notify_message="New tag $repo_name/$tag_name"
+              if [ -n "$remote" ]; then
+                  notify_message="${notify_message} at $remote"
+              fi
+              dudenotify $icon_path "$notify_message" ""
               ;;
           esac
         done <<< "$changes"
