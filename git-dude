@@ -32,6 +32,8 @@ if [[ $(git config dude.notify-command) ]]; then
   notify_cmd=$(git config dude.notify-command)
 elif [ $(which notify-send 2>/dev/null) ]; then
   notify_cmd='notify-send -i "$ICON_PATH" "$TITLE" "$DESCRIPTION"'
+elif [ $(which terminal-notifier 2>/dev/null) ]; then
+  notify_cmd='terminal-notifier -title "$TITLE" -message"$DESCRIPTION"'
 elif [ $(which growlnotify 2>/dev/null) ]; then
   notify_cmd='growlnotify -n "$app_name" --image "$ICON_PATH" -m "$DESCRIPTION" "$TITLE"'
 elif [ $(which kdialog 2>/dev/null) ]; then
