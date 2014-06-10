@@ -51,7 +51,7 @@ function dudenotify() {
     eval $notify_cmd
   fi
 
-  date "+%T %D"
+  date "+%x %X"
   echo "$TITLE"
   if [ -n "$DESCRIPTION" ]; then
     echo "$DESCRIPTION"
