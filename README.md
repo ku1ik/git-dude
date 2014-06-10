@@ -24,6 +24,8 @@ OSX:
 
 ![git-dude on Mac OSX](https://github.com/downloads/sickill/git-dude/git-dude-osx-shot.png)
 
+![git-dude on Mac OSX](http://f.cl.ly/items/0W2H200j441K392G160H/git-dude-notification-center.png)
+
 Haiku:
 
 ![git-dude on Haiku](https://github.com/downloads/sickill/git-dude/git-dude-haiku-shot.png)
@@ -39,6 +41,9 @@ On OSX:
 
 * `growlnotify`, from [Growl Extras](http://growl.info/extras.php#growlnotify)
   (Homebrew: _growlnotify_ package)
+
+* `terminal-notifier`, from [Alloy](https://github.com/alloy/terminal-notifier)
+  `[sudo] gem install terminal-notifier`
 
 ## Installation
 
@@ -91,6 +96,12 @@ to monitor instead of _pwd_.
 This way you can have multiple _dude directories_ each being monitored by
 separate git-dude process.
 
+## Github
+
+If the repo is on github and you are using `terminal-notifier` when you click
+on the notification banner you'll be redirected to the github project page that
+will show you the commit and if possible comparison with older one.
+
 ## Configuration
 
 ### Global
@@ -123,3 +134,7 @@ Tell git-dude to ignore specific repository (if you want to _unmonitor_ it):
 ## Author
 
 Marcin Kulik (http://ku1ik.com/ | @sickill)
+
+## Contributors
+
+Davide D'Agostino (http://daddye.it | @DAddYE)
