@@ -129,7 +129,7 @@ fork. Therefore it is possible to specify a custom remote:
     $ git config dude.remote upstream
 
 With a Git remote configuration like below, it will monitor the
-upstream repo instead of my fork:
+upstream repo instead of your fork:
 
     $ git remote -v
     origin  git@github.com:holmboe/git-dude.git (fetch)
