@@ -120,6 +120,23 @@ Tell git-dude to ignore specific repository (if you want to _unmonitor_ it):
 
     $ git config dude.ignore true
 
+## Custom upstream remote
+
+When you have forked a repository you are likely to be more interested
+in what changes happen in the upstream repository rather than your own
+fork. Therefore it is possible to specify a custom remote:
+
+    $ git config dude.remote upstream
+
+With a Git remote configuration like below, it will monitor the
+upstream repo instead of my fork:
+
+    $ git remote -v
+    origin  git@github.com:holmboe/git-dude.git (fetch)
+    origin  git@github.com:holmboe/git-dude.git (push)
+    upstream        git://github.com/sickill/git-dude.git (fetch)
+    upstream        git://github.com/sickill/git-dude.git (push)
+
 ## Author
 
 Marcin Kulik (http://ku1ik.com/ | @sickill)
