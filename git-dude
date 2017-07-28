@@ -52,23 +52,21 @@ elif [ $(which gnome-screensaver-command 2>/dev/null) ]; then
   screensaver_cmd='LANG=C gnome-screensaver-command -q | grep -q "is active"'
 fi
 
-function screensaver() {
+function screensaver_active() {
   if [ -n "$screensaver_cmd" ]; then
     eval $screensaver_cmd
-    if [[ $? != 0 ]]; then
-      return 1
-    fi
+    return $?
   fi
 
   # if we cannot be certain, default to saying screensaver is not
   # active in order to run git-dude on every loop
-  return 0
+  return 1
 }
 
 [[ -d "$1" ]] && cd $1
 
 while true; do
-  if ! screensaver; then
+  if ! screensaver_active; then
     for dir_name in *; do
       if [[ -d "$dir_name" && $(cd "$dir_name"; git rev-parse --git-dir 2>/dev/null) ]]; then
 
