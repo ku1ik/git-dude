@@ -122,6 +122,9 @@ while true; do
       fi
     done
   fi
-
-  sleep $interval
+  if [ "$interval" = "0" ]; then    
+     exit 0
+  else
+     sleep $interval
+  fi 
 done
