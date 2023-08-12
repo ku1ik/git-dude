@@ -1,9 +1,9 @@
 #!/bin/bash
 #
 # git-dude - Git commit notifier
-# https://github.com/sickill/git-dude
+# https://github.com/ku1ik/git-dude
 #
-# Copyright (C) 2011-2015 Marcin Kulik <http://ku1ik.com/>
+# Copyright (C) 2011 Marcin Kulik <https://ku1ik.com/>
 #
 # Distributed under the GNU General Public License, version 3.0.
 
