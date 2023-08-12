@@ -43,7 +43,7 @@ On OSX:
 ## Installation
 
 ```bash
-$ curl -skL https://github.com/sickill/git-dude/raw/master/git-dude >~/bin/git-dude
+$ curl -skL https://github.com/ku1ik/git-dude/raw/master/git-dude >~/bin/git-dude
 $ chmod +x ~/bin/git-dude
 ```
 
@@ -158,10 +158,10 @@ upstream repo instead of your fork:
     $ git remote -v
     origin  git@github.com:holmboe/git-dude.git (fetch)
     origin  git@github.com:holmboe/git-dude.git (push)
-    upstream        git://github.com/sickill/git-dude.git (fetch)
-    upstream        git://github.com/sickill/git-dude.git (push)
+    upstream        git://github.com/ku1ik/git-dude.git (fetch)
+    upstream        git://github.com/ku1ik/git-dude.git (push)
 
 ## Author
 
-Marcin Kulik (http://ku1ik.com/ | @sickill)
+Marcin Kulik (https://ku1ik.com/ | @ku1ik)
 
